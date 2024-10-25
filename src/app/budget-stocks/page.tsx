@@ -1,91 +1,122 @@
-// pages/index.js
-import { useState } from 'react';
-import axios from 'axios';
+"use client";
 
-const HomePage = () => {
+import React, { useEffect, useState } from 'react';
+
+const StocksPage = () => {
+  const [analyticsData, setAnalyticsData] = useState([]);
   const [budget, setBudget] = useState('');
   const [stocks, setStocks] = useState([]);
-  const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleInputChange = (e) => {
-    setBudget(e.target.value);
-  };
+  useEffect(() => {
+    async function fetchAnalyticsData() {
+      // Mock API Call
+      const mockAnalytics = [
+        { stock: 'AAPL', performance: 'Strong Buy', target: 180 },
+        { stock: 'GOOGL', performance: 'Hold', target: 2900 },
+      ];
+      setAnalyticsData(mockAnalytics);
+    }
+    
+    fetchAnalyticsData();
+  }, []);
 
   const fetchAffordableStocks = async () => {
     if (!budget) {
-      setError('Please enter a budget');
+      setErrorMessage('Please enter a budget');
+      setStocks([]);
       return;
     }
 
+    const url = 'https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-recommendations?symbol=GOOGL'; // Use a default symbol for recommendations
+
     try {
-      const response = await axios.get('/api/stocks', {
-        params: { budget },
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'x-rapidapi-key': 'a90b444b85mshf403ba911915a15p17c266jsn919cf8b46587', // Replace with your actual API key
+          'x-rapidapi-host': 'apidojo-yahoo-finance-v1.p.rapidapi.com',
+        },
       });
-      setStocks(response.data);
-      setError(''); // Clear previous errors
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Response body:', data); // Log the full response body for debugging
+
+        const quotes = data.finance.result.length > 0 ? data.finance.result[0].quotes : [];
+
+        if (quotes.length > 0) {
+          const budgetValue = parseFloat(budget);
+          const affordableStocks = quotes.filter(stock => {
+            const price = stock.regularMarketPrice !== undefined ? stock.regularMarketPrice : 0.0;
+            return price <= budgetValue;
+          });
+
+          setStocks(affordableStocks);
+          setErrorMessage('');
+        } else {
+          setStocks([]);
+          setErrorMessage('No stock recommendations found.');
+        }
+      } else {
+        const errorText = await response.text();
+        setErrorMessage(`Failed to fetch stocks: ${errorText}`);
+        setStocks([]);
+      }
     } catch (error) {
-      console.error("Error fetching stocks:", error);
-      setError('Failed to fetch stocks');
+      console.error('Error:', error);
+      setErrorMessage(`Error: ${error}`);
+      setStocks([]);
     }
   };
 
   return (
-    <div>
-      <h1>Stock Investment Advisor</h1>
-      <h2>Find Affordable Stocks</h2>
-      <input
-        type="number"
-        placeholder="Enter your budget"
-        value={budget}
-        onChange={handleInputChange}
-      />
-      <button onClick={fetchAffordableStocks}>Search</button>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <div>
-        {stocks.length > 0 ? (
-          <ul>
-            {stocks.map((stock) => (
-              <li key={stock.symbol}>
-                {stock.name} - ${stock.price}
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-4 text-gray-800">Stock Analytics</h1>
+      <div className="grid grid-cols-2 gap-4">
+        {analyticsData.map((data, index) => (
+          <div key={index} className="p-4 bg-white shadow rounded">
+            <h2 className="text-xl font-semibold text-gray-800">{data.stock}</h2>
+            <p className="text-gray-700">Recommendation: {data.performance}</p>
+            <p className="text-gray-700">Target Price: <span className="font-bold text-green-600">${data.target}</span></p>
+          </div>
+        ))}
+      </div>
+      <div className="mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Find Affordable Stocks</h2>
+        <input
+          type="number"
+          placeholder="Enter your budget"
+          value={budget}
+          onChange={(e) => setBudget(e.target.value)}
+          className="border p-2 rounded w-full mb-2"
+        />
+        <button
+          onClick={fetchAffordableStocks}
+          className="bg-blue-500 text-white py-2 px-4 rounded"
+        >
+          Search
+        </button>
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+        <ul className="mt-4">
+          {stocks.length > 0 ? (
+            stocks.map((stock, index) => (
+              <li key={index} className="p-2 bg-white shadow rounded mb-2">
+                <strong className="text-gray-800">{stock.shortName ? stock.shortName : 'N/A'}</strong> - 
+                <span className="font-bold text-green-600">
+                  {stock.regularMarketPrice !== null ? ` $${stock.regularMarketPrice}` : ' Price not available'}
+                </span>
               </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No stocks found in this budget.</p>
-        )}
+            ))
+          ) : (
+            <p className="text-gray-600">No stocks found within the specified budget.</p>
+          )}
+        </ul>
       </div>
     </div>
   );
 };
 
-export default HomePage;
-
-// pages/api/stocks.js
-import axios from 'axios';
-
-const API_KEY = process.env.YAHOO_FINANCE_API_KEY; // Make sure to set your API key in .env.local
-const BASE_URL = 'https://your-yahoo-finance-api-endpoint'; // Replace with the Yahoo Finance API base URL
-
-export default async function handler(req, res) {
-  const { budget } = req.query;
-
-  try {
-    // Fetch stock data using the Yahoo Finance API
-    const response = await axios.get(`${BASE_URL}/StockGetFinancialData`, {
-      params: {
-        apiKey: API_KEY,
-        // Add any necessary parameters to filter stocks
-      },
-    });
-
-    // Filter stocks that are affordable based on the user's budget
-    const affordableStocks = response.data.filter((stock) => {
-      return stock.price <= budget; // Adjust according to the actual data structure
-    });
-
-    res.status(200).json(affordableStocks);
-  } catch (error) {
-    console.error("Error fetching data from Yahoo Finance:", error);
-    res.status(500).json({ error: 'Failed to fetch data' });
-  }
-}
+export default StocksPage;
