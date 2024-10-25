@@ -36,6 +36,9 @@ const Sidebar = () => {
           <li className="mb-4">
             <Link href="/help">Help</Link>
           </li>
+          <li className="mb-4">
+            <Link href="/budget-stocks">Budget</Link>
+          </li>
         </ul>
       </nav>
     </div>
