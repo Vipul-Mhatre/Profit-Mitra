@@ -18,6 +18,24 @@ const Sidebar = () => {
           <li className="mb-4">
             <Link href="/recommendations">Recommendations</Link>
           </li>
+          <li className="mb-4">
+            <Link href="/news">News</Link>
+          </li>
+          <li className="mb-4">
+            <Link href="/portfolio">Portfolio</Link>
+          </li>
+          <li className="mb-4">
+            <Link href="/notifications">Notifications</Link>
+          </li>
+          <li className="mb-4">
+            <Link href="/profile">Profile</Link>
+          </li>
+          <li className="mb-4">
+            <Link href="/settings">Settings</Link>
+          </li>
+          <li className="mb-4">
+            <Link href="/help">Help</Link>
+          </li>
         </ul>
       </nav>
     </div>
