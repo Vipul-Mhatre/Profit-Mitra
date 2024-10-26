@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
+import { link } from 'fs';
 
 const Sidebar = () => {
   useEffect(() => {
@@ -26,10 +27,13 @@ const Sidebar = () => {
   return (
     <div className="h-screen w-64 text-white flex flex-col">
       <div className="p-4">
-        <h2 className="text-xl font-bold">Dashboard</h2>
+        <h2 className="text-xl font-bold ">Profit Mitra</h2>
       </div>
       <nav className="flex-1 p-4">
         <ul>
+        <li className="mb-4">
+            <Link href="/">Dashboard</Link>
+          </li>
           <li className="mb-4">
             <Link href="/stocks">Stock Price</Link>
           </li>
