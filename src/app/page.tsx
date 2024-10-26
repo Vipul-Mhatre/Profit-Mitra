@@ -96,14 +96,14 @@ const HomePage = () => {
       </div>
 
       <div className="mt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div className="w-full md:w-1/2 h-48"> {/* Set height to 50% */}
+        <div className=" w-[20vw] width-10"> {/* Set height to 50% */}
           <h2 className="text-2xl font-bold mb-4 text-black">Stock Price Distribution</h2>
-          <Pie data={pieData} options={{ responsive: true, maintainAspectRatio: false }} />
+          <Pie data={pieData} options={{ responsive: true, maintainAspectRatio: true }} />
         </div>
 
         <div className="w-full md:w-1/2 h-48"> {/* Set height to 50% */}
           <h2 className="text-2xl font-bold mb-4 text-black">Stock Volume Trend</h2>
-          <Line data={lineData} options={{ responsive: true, maintainAspectRatio: false }} />
+          <Line data={lineData} options={{ responsive: true, maintainAspectRatio: true }} />
         </div>
       </div>
 
