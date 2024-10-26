@@ -116,8 +116,8 @@ const HomePage = () => {
   const totalVolumeTraded = stockData.reduce((sum, stock) => sum + stock.volume, 0).toLocaleString();
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen" >
-      <Background/>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <Background />
       <h1 className="text-3xl font-bold mb-4 text-black">Your Personalized Investment Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -144,33 +144,37 @@ const HomePage = () => {
           <Line data={lineData} options={{ responsive: true, maintainAspectRatio: true }} />
         </div>
       </div>
-<div>
-<div className="mt-8 w-full h-48">
-        <h2 className="text-2xl font-bold mb-4 text-black">Stock Price Change</h2>
-        <Bar data={barData} options={{ responsive: true, maintainAspectRatio: true }} />
+
+      <div className="mt-8 flex flex-col md:flex-row justify-between gap-4">
+        <div className="w-full md:w-1/2 h-48">
+          <h2 className="text-2xl font-bold mb-4 text-black">Stock Price Change</h2>
+          <Bar data={barData} options={{ responsive: true, maintainAspectRatio: true }} />
+        </div>
+
+        <div className="w-full md:w-1/2 h-48">
+          <h2 className="text-2xl font-bold mb-4 text-black">Price Histogram</h2>
+          <Bar data={histogramData} options={{ responsive: true, maintainAspectRatio: true }} />
+        </div>
       </div>
-      <div className="mt-8 w-full h-48">
-        <h2 className="text-2xl font-bold mb-4 text-black">Price Histogram</h2>
-        <Bar data={histogramData} options={{ responsive: true, maintainAspectRatio: true }} />
-      </div>
-</div>
+      <br />
+      <br />
 
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 bg-white shadow rounded-lg">
-          <h2 className="text-xl font-semibold text-black">Average Stock Price</h2>
-          <p className="text-lg font-bold">${averagePrice}</p>
-        </div>
+  <div className="p-4 bg-blue-100 shadow rounded-lg">
+    <h2 className="text-xl font-semibold text-black">Average Stock Price</h2>
+    <p className="text-lg font-bold text-red-500">${averagePrice}</p> {/* Added text-red-500 */}
+  </div>
 
-        <div className="p-4 bg-white shadow rounded-lg">
-          <h2 className="text-xl font-semibold text-black">Total Price Change (%)</h2>
-          <p className="text-lg font-bold">{totalPriceChange}%</p>
-        </div>
+  <div className="p-4 bg-blue-100 shadow rounded-lg">
+    <h2 className="text-xl font-semibold text-black">Total Price Change (%)</h2>
+    <p className="text-lg font-bold text-red-500">{totalPriceChange}%</p> {/* Added text-red-500 */}
+  </div>
 
-        <div className="p-4 bg-white shadow rounded-lg">
-          <h2 className="text-xl font-semibold text-black">Total Volume Traded</h2>
-          <p className="text-lg font-bold">{totalVolumeTraded}</p>
-        </div>
-      </div>
+  <div className="p-4 bg-blue-100 shadow rounded-lg">
+    <h2 className="text-xl font-semibold text-black">Total Volume Traded</h2>
+    <p className="text-lg font-bold text-red-500">{totalVolumeTraded}</p> {/* Added text-red-500 */}
+  </div>
+</div>
 
     </div>
   );

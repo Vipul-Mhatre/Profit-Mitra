@@ -34,35 +34,38 @@ const Sidebar = () => {
         <li className="mb-4">
             <Link href="/">Dashboard</Link>
           </li>
-          <li className="mb-4">
+          {/* <li className="mb-4">
             <Link href="/stocks">Stock Price</Link>
-          </li>
-          <li className="mb-4">
+          </li> */}
+          {/* <li className="mb-4">
             <Link href="/analytics">Analytics</Link>
-          </li>
-          <li className="mb-4">
+          </li> */}
+          {/* <li className="mb-4">
             <Link href="/recommendations">Recommendations</Link>
-          </li>
+          </li> */}
           <li className="mb-4">
             <Link href="/budget-stocks">Budget</Link>
           </li>
           <li className="mb-4">
             <Link href="/news">News</Link>
           </li>
-          <li className="mb-4">
+          {/* <li className="mb-4">
             <Link href="/portfolio">Portfolio</Link>
-          </li>
-          <li className="mb-4">
+          </li> */}
+          {/* <li className="mb-4">
             <Link href="/notifications">Notifications</Link>
-          </li>
+          </li> */}
           <li className="mb-4">
             <Link href="/profile">Profile</Link>
           </li>
-          <li className="mb-4">
+          {/* <li className="mb-4">
             <Link href="/settings">Settings</Link>
+          </li> */}
+                    <li className="mb-4">
+            <Link href="/history">History</Link>
           </li>
           <li className="mb-4">
-            <Link href="/help">Help</Link>
+            <Link href="/faq">Help</Link>
           </li>
         </ul>
       </nav>
