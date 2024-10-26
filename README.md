@@ -1,8 +1,10 @@
-# ProfitMitra: Personalized AI-Powered Investment Advisory Tool
+# Profit Mitra: Personalized AI-Powered Investment Advisory Tool
 
 ## Overview
 
 ProfitMitra is a personalized AI-powered investment advisory tool designed to provide individualized financial advice and investment recommendations based on the user’s unique financial data. By leveraging powerful forecasting models, ProfitMitra offers users insights into stock trends, eco-friendly investment suggestions, and gamified tools to help achieve financial goals. The app uses advanced time series analysis techniques to forecast financial trends and deliver a customized investment experience.
+
+Demo Video :- https://drive.google.com/file/d/1TBVErE1lF0LRV8vaP8cbW-4zShNyuR61/view?usp=sharing
 
 ## Features
 
@@ -12,7 +14,8 @@ ProfitMitra utilizes user data to forecast investment trends using advanced fore
 - **Prophet**: Used for robust time series forecasting.
 - **Interpolation**: Fills in missing data to maintain accuracy.
 - **LSTM (Long Short-Term Memory)**: Recurrent neural network architecture for complex time series prediction.
-
+- **Personalized AI Chatbot**: Provides with accurate responses to the user queries.
+  
 ### Extra Features
 ProfitMitra provides additional features to enhance the user experience, as implemented in the Next.js app:
 
@@ -34,8 +37,10 @@ ProfitMitra provides additional features to enhance the user experience, as impl
 - **Back-End & API Integration**:
   - **Node.js & Express**: Powers any server-side logic for handling requests, authentication, and real-time data updates.
   - **API Integration**: Real-time stock data and financial news are fetched using third-party APIs:
-1.Yahoo Finance
-2. Google News API  
+  - 1.Yahoo Finance
+  - 2. Google News API
+  - 3. ChatBase
+       
   - **Data Processing**: Stock data and user financial data are pre-processed for optimal model input, including data cleaning, normalization, and handling missing values.
 
 - **Machine Learning Models**:
