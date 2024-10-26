@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const Sidebar = () => {
   return (
-    <div className="h-screen w-64 bg-gray-800 text-white flex flex-col">
+    <div className="h-screen w-64 text-white flex flex-col">
       <div className="p-4">
         <h2 className="text-xl font-bold">Dashboard</h2>
       </div>
@@ -17,6 +17,9 @@ const Sidebar = () => {
           </li>
           <li className="mb-4">
             <Link href="/recommendations">Recommendations</Link>
+          </li>
+          <li className="mb-4">
+            <Link href="/budget-stocks">Budget</Link>
           </li>
           <li className="mb-4">
             <Link href="/news">News</Link>
@@ -35,9 +38,6 @@ const Sidebar = () => {
           </li>
           <li className="mb-4">
             <Link href="/help">Help</Link>
-          </li>
-          <li className="mb-4">
-            <Link href="/budget-stocks">Budget</Link>
           </li>
         </ul>
       </nav>

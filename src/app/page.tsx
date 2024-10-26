@@ -1,28 +1,34 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, LineElement, PointElement, Filler } from 'chart.js';
-import { Pie, Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Filler,
+  BarElement,
+} from 'chart.js';
+import { Pie, Line, Bar } from 'react-chartjs-2';
 
-// Register the necessary components
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, LineElement, PointElement, Filler);
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, LineElement, PointElement, Filler, BarElement);
 
-// Interface for StockData
 interface StockData {
   symbol: string;
   price: number;
   change: number;
-  volume: number; // Adding volume for more analytics
+  volume: number;
 }
 
-// Main Component
 const HomePage = () => {
   const [stockData, setStockData] = useState<StockData[]>([]);
-  
-  // Mock API call 
+
   useEffect(() => {
     async function fetchStockData() {
-      // Replace with actual API call
       const mockData: StockData[] = [
         { symbol: 'AAPL', price: 150.25, change: 1.2, volume: 3000000 },
         { symbol: 'GOOGL', price: 2750.32, change: -0.3, volume: 1500000 },
@@ -35,11 +41,10 @@ const HomePage = () => {
       ];
       setStockData(mockData);
     }
-    
+
     fetchStockData();
   }, []);
-  
-  // Prepare data for Pie and Line Charts
+
   const colors = [
     'rgba(255, 99, 132, 0.6)',
     'rgba(54, 162, 235, 0.6)',
@@ -57,8 +62,8 @@ const HomePage = () => {
       {
         label: 'Stock Price Distribution',
         data: stockData.map(stock => stock.price),
-        backgroundColor: stockData.map((_, index) => colors[index % colors.length]), // Different color for each company
-        borderColor: stockData.map((_, index) => colors[index % colors.length].replace('0.6', '1')), // Same color for border
+        backgroundColor: colors,
+        borderColor: colors.map(color => color.replace('0.6', '1')),
         borderWidth: 1,
       },
     ],
@@ -78,10 +83,41 @@ const HomePage = () => {
     ],
   };
 
+  const barData = {
+    labels: stockData.map(stock => stock.symbol),
+    datasets: [
+      {
+        label: 'Stock Price Change (%)',
+        data: stockData.map(stock => stock.change),
+        backgroundColor: colors,
+        borderColor: colors.map(color => color.replace('0.6', '1')),
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const histogramData = {
+    labels: stockData.map(stock => stock.symbol),
+    datasets: [
+      {
+        label: 'Price Distribution',
+        data: stockData.map(stock => stock.price),
+        backgroundColor: 'rgba(255, 159, 64, 0.6)',
+        borderColor: 'rgba(255, 159, 64, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  // Calculate analytics
+  const averagePrice = (stockData.reduce((sum, stock) => sum + stock.price, 0) / stockData.length).toFixed(2);
+  const totalPriceChange = stockData.reduce((sum, stock) => sum + stock.change, 0).toFixed(2);
+  const totalVolumeTraded = stockData.reduce((sum, stock) => sum + stock.volume, 0).toLocaleString();
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-4 text-black">Your Personalized Investment Dashboard</h1>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {stockData.map((stock) => (
           <div key={stock.symbol} className="p-4 bg-white shadow rounded-lg hover:shadow-lg transition-shadow duration-300">
@@ -96,28 +132,42 @@ const HomePage = () => {
       </div>
 
       <div className="mt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div className=" w-[20vw] width-10"> {/* Set height to 50% */}
+        <div className="w-[20vw]">
           <h2 className="text-2xl font-bold mb-4 text-black">Stock Price Distribution</h2>
           <Pie data={pieData} options={{ responsive: true, maintainAspectRatio: true }} />
         </div>
 
-        <div className="w-full md:w-1/2 h-48"> {/* Set height to 50% */}
+        <div className="w-full md:w-1/2 h-48">
           <h2 className="text-2xl font-bold mb-4 text-black">Stock Volume Trend</h2>
           <Line data={lineData} options={{ responsive: true, maintainAspectRatio: true }} />
         </div>
       </div>
 
-      {/* Additional analytics representations */}
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="mt-8 w-full h-48">
+        <h2 className="text-2xl font-bold mb-4 text-black">Stock Price Change</h2>
+        <Bar data={barData} options={{ responsive: true, maintainAspectRatio: true }} />
+      </div>
+
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="p-4 bg-white shadow rounded-lg">
           <h2 className="text-xl font-semibold text-black">Average Stock Price</h2>
-          <p className="text-lg font-bold">${(stockData.reduce((sum, stock) => sum + stock.price, 0) / stockData.length).toFixed(2)}</p>
+          <p className="text-lg font-bold">${averagePrice}</p>
         </div>
-        
+
+        <div className="p-4 bg-white shadow rounded-lg">
+          <h2 className="text-xl font-semibold text-black">Total Price Change (%)</h2>
+          <p className="text-lg font-bold">{totalPriceChange}%</p>
+        </div>
+
         <div className="p-4 bg-white shadow rounded-lg">
           <h2 className="text-xl font-semibold text-black">Total Volume Traded</h2>
-          <p className="text-lg font-bold">{stockData.reduce((sum, stock) => sum + stock.volume, 0).toLocaleString()}</p>
+          <p className="text-lg font-bold">{totalVolumeTraded}</p>
         </div>
+      </div>
+
+      <div className="mt-8 w-full h-48">
+        <h2 className="text-2xl font-bold mb-4 text-black">Price Histogram</h2>
+        <Bar data={histogramData} options={{ responsive: true, maintainAspectRatio: true }} />
       </div>
     </div>
   );
