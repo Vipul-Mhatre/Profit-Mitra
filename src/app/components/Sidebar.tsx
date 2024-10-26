@@ -1,7 +1,28 @@
-import React from 'react';
+"use client";
+
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 
 const Sidebar = () => {
+  useEffect(() => {
+    window.embeddedChatbotConfig = {
+      chatbotId: "rRkAghsWB9AfyddZ7WAwF",
+      domain: "www.chatbase.co"
+    };
+
+    const script = document.createElement('script');
+    script.src = "https://www.chatbase.co/embed.min.js";
+    script.setAttribute('chatbotId', "rRkAghsWB9AfyddZ7WAwF");
+    script.setAttribute('domain', "www.chatbase.co");
+    script.defer = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <div className="h-screen w-64 text-white flex flex-col">
       <div className="p-4">
