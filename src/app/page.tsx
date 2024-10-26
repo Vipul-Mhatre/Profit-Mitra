@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import Background from './components/Background';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -115,7 +116,8 @@ const HomePage = () => {
   const totalVolumeTraded = stockData.reduce((sum, stock) => sum + stock.volume, 0).toLocaleString();
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-screen" >
+      <Background/>
       <h1 className="text-3xl font-bold mb-4 text-black">Your Personalized Investment Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -142,11 +144,16 @@ const HomePage = () => {
           <Line data={lineData} options={{ responsive: true, maintainAspectRatio: true }} />
         </div>
       </div>
-
-      <div className="mt-8 w-full h-48">
+<div>
+<div className="mt-8 w-full h-48">
         <h2 className="text-2xl font-bold mb-4 text-black">Stock Price Change</h2>
         <Bar data={barData} options={{ responsive: true, maintainAspectRatio: true }} />
       </div>
+      <div className="mt-8 w-full h-48">
+        <h2 className="text-2xl font-bold mb-4 text-black">Price Histogram</h2>
+        <Bar data={histogramData} options={{ responsive: true, maintainAspectRatio: true }} />
+      </div>
+</div>
 
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="p-4 bg-white shadow rounded-lg">
@@ -165,10 +172,6 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="mt-8 w-full h-48">
-        <h2 className="text-2xl font-bold mb-4 text-black">Price Histogram</h2>
-        <Bar data={histogramData} options={{ responsive: true, maintainAspectRatio: true }} />
-      </div>
     </div>
   );
 };
